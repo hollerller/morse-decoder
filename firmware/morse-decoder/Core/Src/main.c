@@ -73,6 +73,7 @@ int main(void) {
 	uint8_t last_press = 0;
 	uint32_t start = 0;
 	uint32_t press_time = 0;
+	uint32_t last_symbol_time = 0;
 
 	uint8_t buf[32];
 
@@ -119,6 +120,8 @@ int main(void) {
 		} else if (current_press == 0 && last_press == 1) {
 			press_time = HAL_GetTick() - start;
 
+			last_symbol_time = HAL_GetTick();
+
 			if (press_time > 0 && press_time < 300) {
 				sprintf((char*) buf, ".\r\n");
 				HAL_GPIO_WritePin(LD1_GPIO_Port, LD1_Pin, 1);
@@ -133,6 +136,12 @@ int main(void) {
 				HAL_GPIO_WritePin(LD3_GPIO_Port, LD3_Pin, 1);
 			}
 
+		}
+
+		if (HAL_GetTick() - last_symbol_time > 2000 && last_symbol_time > 0) {
+			sprintf((char*) buf, "/\r\n");
+			HAL_UART_Transmit(&huart3, buf, strlen((char*) buf), 100);
+			last_symbol_time = 0;
 		}
 
 		last_press = current_press;
