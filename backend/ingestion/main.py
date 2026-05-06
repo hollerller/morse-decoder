@@ -1,7 +1,7 @@
 import serial
 import pika
 
-ser = serial.Serial("/dev/tty.usbmodem11203")
+ser = serial.Serial("/dev/tty.usbmodem11103")
 ser.baudrate = 115200
 print(ser.name)
 

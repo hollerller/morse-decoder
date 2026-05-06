@@ -3,6 +3,7 @@ import utils
 
 connection = pika.BlockingConnection(pika.ConnectionParameters("localhost"))
 channel = connection.channel()
+channel.queue_declare(queue="decoded")
 
 
 class MorseDecoder:
@@ -15,6 +16,11 @@ class MorseDecoder:
         else:
             symbol = "".join(self.symbols)
             print(utils.morse_to_letter.get(symbol, "?"))
+            channel.basic_publish(
+                exchange="",
+                routing_key="decoded",
+                body=utils.morse_to_letter.get(symbol, "?"),
+            )
             self.symbols = []
 
 

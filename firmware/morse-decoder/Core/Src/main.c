@@ -110,6 +110,8 @@ int main(void) {
 		/* USER CODE BEGIN 3 */
 		current_press = HAL_GPIO_ReadPin(USER_Btn_GPIO_Port, USER_Btn_Pin);
 
+		HAL_Delay(50);
+
 		if (current_press == 1 && last_press == 0) {
 			start = HAL_GetTick();
 
